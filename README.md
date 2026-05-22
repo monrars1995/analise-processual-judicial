@@ -132,14 +132,17 @@ O relatório gerado contém:
 
 1. **Capa** — número do processo, classe, assunto, prioridade, valor da causa e partes
 2. **Resumo Executivo** — quantitativo de irregularidades por gravidade (tabela colorida)
-3. **Linha do Tempo Processual** — tabela cronológica completa com data, hora, tipo e documento
-4. **Irregularidades Identificadas** — detalhamento por item com:
+3. **Gráficos e Visualizações** — representação visual dos dados:
+   - Gráfico de barras: andamentos por mês
+   - Gráfico de pizza: distribuição por tipo de documento (top 5)
+4. **Linha do Tempo Processual** — tabela cronológica completa com data, hora, tipo e documento
+5. **Irregularidades Identificadas** — detalhamento por item com:
    - Gravidade e categoria
    - Descrição da irregularidade
    - Fundamento legal
    - Data da ocorrência
    - Recomendação de ação
-5. **Recomendações Finais** — síntese das ações sugeridas
+6. **Recomendações Finais** — síntese das ações sugeridas
 
 > O PDF usa paleta de cores profissional (azul institucional, alertas em laranja/vermelho/amarelo) e numeração de páginas.
 

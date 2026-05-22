@@ -15,9 +15,13 @@ try:
     from reportlab.lib.units import cm
     from reportlab.platypus import (
         SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle,
-        PageBreak, ListFlowable, ListItem, KeepTogether
+        PageBreak, ListFlowable, ListItem, KeepTogether, Image
     )
     from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY
+    from reportlab.graphics.shapes import Drawing
+    from reportlab.graphics.charts.barcharts import VerticalBarChart
+    from reportlab.graphics.charts.piecharts import Pie
+    from reportlab.graphics import renderPDF
 except ImportError:
     print("Erro: reportlab não instalado. Execute: pip install reportlab")
     sys.exit(1)
@@ -263,6 +267,85 @@ def build_resumo(irregs, styles):
     return elements
 
 
+def build_graficos(linha, styles):
+    elements = []
+    elements.append(Paragraph("GRÁFICOS E VISUALIZAÇÕES", styles['Secao']))
+    elements.append(Paragraph(
+        "Representação visual dos andamentos e documentos do processo.",
+        styles['Corpo']
+    ))
+    elements.append(Spacer(1, 0.3*cm))
+
+    from collections import Counter
+    from datetime import datetime
+
+    # Parse dates
+    datas_validas = []
+    for item in linha:
+        try:
+            dt = datetime.strptime(item['data'], "%d/%m/%Y")
+            datas_validas.append((item, dt))
+        except ValueError:
+            continue
+
+    if not datas_validas:
+        elements.append(Paragraph("Dados insuficientes para gerar gráficos.", styles['Corpo']))
+        return elements
+
+    # Gráfico 1: Andamentos por mês
+    por_mes = Counter(dt.strftime("%Y-%m") for _, dt in datas_validas)
+    meses = sorted(por_mes.keys())
+    valores = [por_mes[m] for m in meses]
+
+    if len(meses) > 1:
+        drawing = Drawing(400, 200)
+        chart = VerticalBarChart()
+        chart.x = 50
+        chart.y = 50
+        chart.height = 125
+        chart.width = 300
+        chart.data = [valores]
+        chart.categoryAxis.categoryNames = meses
+        chart.categoryAxis.labels.angle = 30
+        chart.categoryAxis.labels.dx = -10
+        chart.categoryAxis.labels.dy = -15
+        chart.valueAxis.valueMin = 0
+        chart.bars[0].fillColor = colors.HexColor('#1a237e')
+        drawing.add(chart)
+        elements.append(Paragraph("<b>Andamentos por Mês</b>", styles['SecaoSub']))
+        elements.append(drawing)
+        elements.append(Spacer(1, 0.3*cm))
+
+    # Gráfico 2: Tipos de documento (top 5)
+    tipos = Counter(item.get('tipo', 'Outros') for item, _ in datas_validas)
+    top_tipos = tipos.most_common(5)
+    if top_tipos:
+        labels = [t[:20] for t, _ in top_tipos]
+        data = [v for _, v in top_tipos]
+        drawing2 = Drawing(400, 200)
+        pie = Pie()
+        pie.x = 100
+        pie.y = 30
+        pie.width = 140
+        pie.height = 140
+        pie.data = data
+        pie.labels = labels
+        pie.sideLabels = True
+        pie.slices.strokeWidth = 0.5
+        pie.slices[0].fillColor = colors.HexColor('#1a237e')
+        pie.slices[1].fillColor = colors.HexColor('#3949ab')
+        pie.slices[2].fillColor = colors.HexColor('#5c6bc0')
+        pie.slices[3].fillColor = colors.HexColor('#7986cb')
+        pie.slices[4].fillColor = colors.HexColor('#9fa8da')
+        drawing2.add(pie)
+        elements.append(Paragraph("<b>Distribuição por Tipo de Documento (Top 5)</b>", styles['SecaoSub']))
+        elements.append(drawing2)
+        elements.append(Spacer(1, 0.3*cm))
+
+    elements.append(PageBreak())
+    return elements
+
+
 def build_linha_tempo(linha, styles):
     elements = []
     elements.append(Paragraph("LINHA DO TEMPO PROCESSUAL", styles['Secao']))
@@ -390,6 +473,8 @@ def gerar_pdf(dados, irregularidades, saida_pdf):
     story.extend(build_capa(meta, styles))
     # Resumo
     story.extend(build_resumo(irregs, styles))
+    # Gráficos
+    story.extend(build_graficos(linha, styles))
     # Linha do tempo
     story.extend(build_linha_tempo(linha, styles))
     # Irregularidades
