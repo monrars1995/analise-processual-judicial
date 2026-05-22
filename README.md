@@ -107,9 +107,11 @@ python scripts/gerar_relatorio.py processo.json irregularidades.json relatorio.p
 ```bash
 # Via pip install
 analise-processual analisar processo.pdf [pasta_saida]
+analise-processual batch /pasta/com/processos /pasta/saida
 
 # Ou diretamente
 python scripts/processo.py analisar processo.pdf [pasta_saida]
+python scripts/processo.py batch /pasta/com/processos /pasta/saida
 ```
 
 Ou passo a passo:
@@ -216,6 +218,16 @@ python scripts/identificar_irregularidades.py <dados.json> [saida_irregularidade
 ```bash
 python scripts/gerar_relatorio.py <dados.json> <irregularidades.json> [saida.pdf]
 ```
+
+### Modo Batch
+
+Processe múltiplos PDFs de uma só vez:
+
+```bash
+analise-processual batch /pasta/com/processos /pasta/saida
+```
+
+Cada PDF será analisado individualmente e os resultados salvos em subpastas.
 
 ### `scripts/estatisticas.py`
 

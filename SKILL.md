@@ -67,6 +67,16 @@ Run command: /processo estatisticas processo.json
 
 **Saída:** JSON com métricas e indicadores do processo.
 
+### `/processo batch <pasta> [pasta_saida]`
+
+Processa todos os PDFs de uma pasta em modo batch, executando o pipeline completo em cada um.
+
+```
+Run command: /processo batch /caminho/dos/processos /caminho/saida
+```
+
+**Saída:** Para cada PDF, gera subpasta com JSON, irregularidades, estatísticas e PDF.
+
 ### CLI Unificada
 
 Para uso direto no terminal sem comandos `/`, use o script `processo.py`:

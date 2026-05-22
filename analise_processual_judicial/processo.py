@@ -126,8 +126,46 @@ def main():
     p_rel.add_argument('output', nargs='?', help='Arquivo PDF de saída')
     p_rel.set_defaults(func=lambda a: run_script('gerar_relatorio', a.dados, a.irregularidades, a.output or 'relatorio.pdf'))
 
+    # batch
+    p_batch = subparsers.add_parser('batch', help='Processar todos os PDFs de uma pasta')
+    p_batch.add_argument('pasta', help='Pasta com PDFs de processos')
+    p_batch.add_argument('output', nargs='?', help='Pasta de saída (padrão: atual)')
+    p_batch.set_defaults(func=cmd_batch)
+
     args = parser.parse_args()
     sys.exit(args.func(args))
+
+
+def cmd_batch(args):
+    pasta = Path(args.pasta)
+    out_dir = Path(args.output) if args.output else Path.cwd()
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    pdfs = list(pasta.glob('*.pdf'))
+    if not pdfs:
+        print(f"❌ Nenhum PDF encontrado em: {pasta}")
+        sys.exit(1)
+
+    print("=" * 60)
+    print(f"📁 MODO BATCH: {len(pdfs)} PDF(s) encontrado(s)")
+    print("=" * 60)
+
+    resultados = []
+    for idx, pdf in enumerate(pdfs, 1):
+        print(f"\n[{idx}/{len(pdfs)}] Processando: {pdf.name}")
+        sub_out = out_dir / pdf.stem
+        sub_out.mkdir(exist_ok=True)
+        rc = cmd_analisar(type('Args', (), {'pdf': str(pdf), 'output': str(sub_out)})())
+        resultados.append((pdf.name, rc))
+
+    print("\n" + "=" * 60)
+    print("✅ BATCH CONCLUÍDO")
+    print("=" * 60)
+    for nome, rc in resultados:
+        status = "✅ OK" if rc == 0 else "❌ Falha"
+        print(f"   {status} — {nome}")
+    print("=" * 60)
+    return 0
 
 
 if __name__ == '__main__':
