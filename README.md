@@ -83,7 +83,8 @@ python scripts/gerar_relatorio.py processo.json irregularidades.json relatorio.p
 ```bash
 python scripts/extrair_dados.py processo.pdf processo.json && \
 python scripts/identificar_irregularidades.py processo.json irregularidades.json && \
-python scripts/gerar_relatorio.py processo.json irregularidades.json relatorio.pdf
+python scripts/gerar_relatorio.py processo.json irregularidades.json relatorio.pdf && \
+python scripts/estatisticas.py processo.json estatisticas.json
 ```
 
 ---
@@ -178,6 +179,24 @@ python scripts/identificar_irregularidades.py <dados.json> [saida_irregularidade
 ```bash
 python scripts/gerar_relatorio.py <dados.json> <irregularidades.json> [saida.pdf]
 ```
+
+### `scripts/estatisticas.py`
+
+**Entrada:** JSON gerado por `extrair_dados.py` (com irregularidades mescladas)
+**Saída:** `JSON` com estatísticas quantitativas do processo
+
+**Uso:**
+```bash
+python scripts/estatisticas.py <dados.json> [saida_estatisticas.json]
+```
+
+**Métricas calculadas:**
+- Período analisado (início, fim, duração)
+- Total de andamentos e média por mês
+- Tipos de documento mais frequentes
+- Intervalos entre andamentos (média, máximo, mínimo)
+- Meses sem movimentação
+- Indicadores de produtividade processual
 
 ---
 

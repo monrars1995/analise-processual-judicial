@@ -56,6 +56,16 @@ Run command: /processo relatorio processo.json irregularidades.json
 
 **Saída:** PDF estruturado e bem diagramado.
 
+### `/processo estatisticas <dados.json> [saida.json]`
+
+Gera estatísticas quantitativas do processo: duração, andamentos por mês, intervalos médios, tipos de documento, meses sem movimentação e indicadores de produtividade.
+
+```
+Run command: /processo estatisticas processo.json
+```
+
+**Saída:** JSON com métricas e indicadores do processo.
+
 ---
 
 ## Workflow
@@ -105,6 +115,24 @@ O script analisa a linha do tempo e detecta:
 Cada irregularidade inclui: gravidade (ALTA/MÉDIA/BAIXA), categoria, descrição, fundamento legal, data e recomendação.
 
 **Para ajustar regras ou adicionar novas**: consulte `references/regras_processuais.md`.
+
+### 4. Estatísticas do Processo (opcional)
+
+Use o script `scripts/estatisticas.py`:
+
+```bash
+python scripts/estatisticas.py <dados.json> [saida_estatisticas.json]
+```
+
+O script calcula:
+- Período analisado (início, fim, duração em dias)
+- Total de andamentos e média por mês
+- Tipos de documento mais frequentes
+- Intervalos entre andamentos (média, máximo, mínimo)
+- Meses sem movimentação
+- Indicadores de produtividade processual
+
+Requer que o JSON de entrada contenha a chave `irregularidades` (mesclar com o resultado de `identificar_irregularidades.py` se necessário).
 
 ### 3. Geração do Relatório PDF
 
