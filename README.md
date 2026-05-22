@@ -43,14 +43,27 @@ Cada irregularidade inclui: **gravidade** (Alta/Média/Baixa), **descrição**, 
 
 ## Instalação
 
-### 1. Clone o repositório
+### Opção 1: Instalação via pip (recomendado)
+
+```bash
+pip install git+https://github.com/monrars1995/analise-processual-judicial.git
+```
+
+Após instalar, o comando `analise-processual` estará disponível globalmente:
+
+```bash
+analise-processual analisar processo.pdf
+```
+
+### Opção 2: Clone e instalação local
 
 ```bash
 git clone https://github.com/monrars1995/analise-processual-judicial.git
 cd analise-processual-judicial
+pip install -e .
 ```
 
-### 2. Instale as dependências
+### Opção 3: Apenas dependências (uso direto dos scripts)
 
 ```bash
 pip install pdfplumber reportlab
@@ -92,6 +105,10 @@ python scripts/gerar_relatorio.py processo.json irregularidades.json relatorio.p
 ### Execução em uma linha
 
 ```bash
+# Via pip install
+analise-processual analisar processo.pdf [pasta_saida]
+
+# Ou diretamente
 python scripts/processo.py analisar processo.pdf [pasta_saida]
 ```
 

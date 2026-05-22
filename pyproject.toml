@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "analise-processual-judicial"
+version = "1.0.0"
+description = "Skill para análise automatizada de processos judiciais digitais. Extrai timeline, identifica irregularidades e gera relatório PDF."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "monrars1995"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Legal Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Office/Business",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "pdfplumber>=0.10.0",
+    "reportlab>=4.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "flake8>=6.0",
+    "black>=23.0",
+]
+
+[project.scripts]
+analise-processual = "analise_processual_judicial.processo:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["analise_processual_judicial*"]
+
+[project.urls]
+Homepage = "https://github.com/monrars1995/analise-processual-judicial"
+Repository = "https://github.com/monrars1995/analise-processual-judicial.git"
+Issues = "https://github.com/monrars1995/analise-processual-judicial/issues"
