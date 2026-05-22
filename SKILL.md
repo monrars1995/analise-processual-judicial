@@ -1,15 +1,66 @@
 ---
 name: analise-processual-judicial
-description: Analisa processos judiciais digitais (PROJUDI, PJe, e-TJ, etc.) baixados em PDF. Extrai linha do tempo dos andamentos, identifica irregularidades processuais baseadas no CPC/CDC/Lei 9.099/95 (prazos, prioridade, tutela, intimação, citação, audiência, sentença, recurso) e gera relatório PDF estruturado e bem diagramado com a análise completa. Use quando o usuário precisar analisar um PDF de processo judicial, gerar cronologia de andamentos, identificar nulidades, prazos vencidos, violação de prioridade de tramitação, ausência de intimação, ou criar relatório forense em PDF.
+description: Analisa processos judiciais digitais (PROJUDI, PJe, e-TJ, etc.) baixados em PDF. Extrai linha do tempo dos andamentos, identifica irregularidades processuais baseadas no CPC/CDC/Lei 9.099/95 (prazos, prioridade, tutela, intimação, citação, audiência, sentença, recurso) e gera relatório PDF estruturado e bem diagramado com a análise completa. Use quando o usuário precisar analisar um PDF de processo judicial, gerar cronologia de andamentos, identificar nulidades, prazos vencidos, violação de prioridade de tramitação, ausência de intimação, ou criar relatório forense em PDF. Comandos disponíveis: /processo analisar, /processo extrair, /processo irregularidades, /processo relatorio.
+risk: unknown
+source: community
 ---
 
 # Análise Processual Judicial
 
 Skill para análise automatizada de processos judiciais digitais em PDF, com extração de linha do tempo, identificação de irregularidades processuais e geração de relatório PDF profissional.
 
+## Comandos Interativos
+
+Esta skill responde aos seguintes comandos `/`:
+
+### `/processo analisar <caminho-do-pdf>`
+
+Executa o pipeline completo: extrai dados, identifica irregularidades e gera o relatório PDF em um único comando.
+
+```
+Run command: /processo analisar processo.pdf
+```
+
+**Saída:**
+- `processo.json` — dados extraídos
+- `irregularidades.json` — irregularidades identificadas
+- `relatorio.pdf` — relatório final
+
+### `/processo extrair <caminho-do-pdf> [saida.json]`
+
+Extrai apenas os dados estruturados do PDF do processo.
+
+```
+Run command: /processo extrair processo.pdf
+```
+
+**Saída:** JSON com metadados, partes, índice de documentos e linha do tempo.
+
+### `/processo irregularidades <dados.json> [saida.json]`
+
+Analisa um JSON previamente extraído e identifica irregularidades processuais.
+
+```
+Run command: /processo irregularidades processo.json
+```
+
+**Saída:** JSON com lista de irregularidades classificadas por gravidade.
+
+### `/processo relatorio <dados.json> <irregularidades.json> [saida.pdf]`
+
+Gera o relatório PDF a partir dos dados e irregularidades já extraídos.
+
+```
+Run command: /processo relatorio processo.json irregularidades.json
+```
+
+**Saída:** PDF estruturado e bem diagramado.
+
+---
+
 ## Workflow
 
-Sempre siga esta sequência:
+Sempre siga esta sequência quando o usuário não usar um comando `/` específico:
 
 1. **Extrair dados** do PDF do processo
 2. **Identificar irregularidades** na linha do tempo
@@ -72,7 +123,7 @@ O relatório PDF contém:
 
 **Dependência**: `reportlab`. Instalar com `pip install reportlab` se necessário.
 
-### Uso Direto (Pipeline Completo)
+### Pipeline Completo
 
 Para executar os 3 passos de uma vez:
 
@@ -81,6 +132,8 @@ python scripts/extrair_dados.py processo.pdf processo.json && \
 python scripts/identificar_irregularidades.py processo.json irregularidades.json && \
 python scripts/gerar_relatorio.py processo.json irregularidades.json relatorio.pdf
 ```
+
+---
 
 ## Quando Não Usar os Scripts
 
