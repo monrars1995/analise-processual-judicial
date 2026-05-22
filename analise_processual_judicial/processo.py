@@ -140,6 +140,11 @@ def main():
     p_exp.add_argument('csv', nargs='?', help='Arquivo CSV de saída')
     p_exp.set_defaults(func=lambda a: run_script('exportar', a.dados, a.irregularidades, a.xlsx or 'exportado.xlsx', a.csv or 'exportado.csv'))
 
+    # comparar
+    p_comp = subparsers.add_parser('comparar', help='Comparar múltiplos processos')
+    p_comp.add_argument('jsons', nargs='+', help='Arquivos JSON dos processos a comparar')
+    p_comp.set_defaults(func=lambda a: run_script('comparar', *a.jsons))
+
     args = parser.parse_args()
     sys.exit(args.func(args))
 

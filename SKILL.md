@@ -89,6 +89,16 @@ Run command: /processo exportar processo.json irregularidades.json
 
 **Dependência:** `openpyxl`. Instalar com `pip install openpyxl` se necessário.
 
+### `/processo comparar <processo1.json> <processo2.json> [...]`
+
+Compara dois ou mais processos judiciais extraídos, mostrando diferenças de ritmo, quantidade de andamentos, irregularidades e tipos de documento.
+
+```
+Run command: /processo comparar processo_a.json processo_b.json
+```
+
+**Saída:** Tabela comparativa no terminal com destaques e ranking.
+
 ### CLI Unificada
 
 Para uso direto no terminal sem comandos `/`, use o script `processo.py`:

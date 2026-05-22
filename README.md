@@ -219,6 +219,19 @@ python scripts/identificar_irregularidades.py <dados.json> [saida_irregularidade
 python scripts/gerar_relatorio.py <dados.json> <irregularidades.json> [saida.pdf]
 ```
 
+### Comparar Processos
+
+Compare múltiplos processos lado a lado:
+
+```bash
+analise-processual comparar processo_a.json processo_b.json processo_c.json
+```
+
+Mostra:
+- Tabela comparativa de andamentos, dias e irregularidades
+- Ranking de processo mais rápido, mais movimentado, mais irregularidades
+- Distribuição de tipos de documento entre os processos
+
 ### Exportar para Excel/CSV
 
 Exporte os dados para planilhas:
