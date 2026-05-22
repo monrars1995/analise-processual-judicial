@@ -15,16 +15,17 @@ Esta skill responde aos seguintes comandos `/`:
 
 ### `/processo analisar <caminho-do-pdf>`
 
-Executa o pipeline completo: extrai dados, identifica irregularidades e gera o relatório PDF em um único comando.
+Executa o pipeline completo: extrai dados, identifica irregularidades, calcula estatísticas e gera o relatório PDF em um único comando.
 
 ```
 Run command: /processo analisar processo.pdf
 ```
 
 **Saída:**
-- `processo.json` — dados extraídos
-- `irregularidades.json` — irregularidades identificadas
-- `relatorio.pdf` — relatório final
+- `{nome}.json` — dados extraídos
+- `{nome}_irregularidades.json` — irregularidades identificadas
+- `{nome}_estatisticas.json` — estatísticas quantitativas
+- `{nome}.pdf` — relatório final
 
 ### `/processo extrair <caminho-do-pdf> [saida.json]`
 
@@ -65,6 +66,18 @@ Run command: /processo estatisticas processo.json
 ```
 
 **Saída:** JSON com métricas e indicadores do processo.
+
+### CLI Unificada
+
+Para uso direto no terminal sem comandos `/`, use o script `processo.py`:
+
+```bash
+python scripts/processo.py analisar processo.pdf [pasta_saida]
+python scripts/processo.py extrair processo.pdf [saida.json]
+python scripts/processo.py irregularidades dados.json [saida.json]
+python scripts/processo.py estatisticas dados.json [saida.json]
+python scripts/processo.py relatorio dados.json irregularidades.json [saida.pdf]
+```
 
 ---
 

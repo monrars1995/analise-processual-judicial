@@ -88,6 +88,12 @@ python scripts/gerar_relatorio.py processo.json irregularidades.json relatorio.p
 ### Execução em uma linha
 
 ```bash
+python scripts/processo.py analisar processo.pdf [pasta_saida]
+```
+
+Ou passo a passo:
+
+```bash
 python scripts/extrair_dados.py processo.pdf processo.json && \
 python scripts/identificar_irregularidades.py processo.json irregularidades.json && \
 python scripts/gerar_relatorio.py processo.json irregularidades.json relatorio.pdf && \
