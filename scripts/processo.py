@@ -13,6 +13,7 @@ Uso:
 import sys
 import os
 import subprocess
+import argparse
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
@@ -29,11 +30,8 @@ def run_script(name, *args):
 
 
 def cmd_analisar(args):
-    if len(args) < 1:
-        print("Uso: processo.py analisar <arquivo.pdf> [pasta_saida]")
-        sys.exit(1)
-    pdf = Path(args[0])
-    out_dir = Path(args[1]) if len(args) > 1 else Path.cwd()
+    pdf = Path(args.pdf)
+    out_dir = Path(args.output) if args.output else Path.cwd()
     out_dir.mkdir(parents=True, exist_ok=True)
 
     base = out_dir / pdf.stem
@@ -59,7 +57,6 @@ def cmd_analisar(args):
         sys.exit(rc)
 
     print(f"\n[3/4] Calculando estatísticas...")
-    # Merge irregularidades into dados for estatisticas
     import json
     with open(dados_json, 'r', encoding='utf-8') as f:
         dados = json.load(f)
@@ -92,27 +89,45 @@ def cmd_analisar(args):
 
 
 def main():
-    if len(sys.argv) < 2:
-        print(__doc__)
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        prog='processo.py',
+        description='CLI unificada da skill Análise Processual Judicial'
+    )
+    subparsers = parser.add_subparsers(dest='command', required=True)
 
-    comando = sys.argv[1].lower()
-    resto = sys.argv[2:]
+    # analisar
+    p_analisar = subparsers.add_parser('analisar', help='Pipeline completo de análise')
+    p_analisar.add_argument('pdf', help='Caminho do PDF do processo')
+    p_analisar.add_argument('output', nargs='?', help='Pasta de saída (padrão: atual)')
+    p_analisar.set_defaults(func=cmd_analisar)
 
-    comandos = {
-        'analisar': cmd_analisar,
-        'extrair': lambda a: run_script('extrair_dados', *a),
-        'irregularidades': lambda a: run_script('identificar_irregularidades', *a),
-        'estatisticas': lambda a: run_script('estatisticas', *a),
-        'relatorio': lambda a: run_script('gerar_relatorio', *a),
-    }
+    # extrair
+    p_extrair = subparsers.add_parser('extrair', help='Extrair dados do PDF')
+    p_extrair.add_argument('pdf', help='Caminho do PDF do processo')
+    p_extrair.add_argument('output', nargs='?', help='Arquivo JSON de saída')
+    p_extrair.set_defaults(func=lambda a: run_script('extrair_dados', a.pdf, a.output or 'processo.json'))
 
-    if comando not in comandos:
-        print(f"Comando desconhecido: {comando}")
-        print(f"Comandos disponíveis: {', '.join(comandos.keys())}")
-        sys.exit(1)
+    # irregularidades
+    p_irreg = subparsers.add_parser('irregularidades', help='Identificar irregularidades')
+    p_irreg.add_argument('json', help='Arquivo JSON com dados extraídos')
+    p_irreg.add_argument('output', nargs='?', help='Arquivo JSON de saída')
+    p_irreg.set_defaults(func=lambda a: run_script('identificar_irregularidades', a.json, a.output or 'irregularidades.json'))
 
-    sys.exit(comandos[comando](resto))
+    # estatisticas
+    p_stats = subparsers.add_parser('estatisticas', help='Gerar estatísticas')
+    p_stats.add_argument('json', help='Arquivo JSON com dados extraídos')
+    p_stats.add_argument('output', nargs='?', help='Arquivo JSON de saída')
+    p_stats.set_defaults(func=lambda a: run_script('estatisticas', a.json, a.output or 'estatisticas.json'))
+
+    # relatorio
+    p_rel = subparsers.add_parser('relatorio', help='Gerar relatório PDF')
+    p_rel.add_argument('dados', help='Arquivo JSON com dados extraídos')
+    p_rel.add_argument('irregularidades', help='Arquivo JSON com irregularidades')
+    p_rel.add_argument('output', nargs='?', help='Arquivo PDF de saída')
+    p_rel.set_defaults(func=lambda a: run_script('gerar_relatorio', a.dados, a.irregularidades, a.output or 'relatorio.pdf'))
+
+    args = parser.parse_args()
+    sys.exit(args.func(args))
 
 
 if __name__ == '__main__':

@@ -1,5 +1,9 @@
 # Análise Processual Judicial
 
+[![Tests](https://github.com/monrars1995/analise-processual-judicial/actions/workflows/tests.yml/badge.svg)](https://github.com/monrars1995/analise-processual-judicial/actions/workflows/tests.yml)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Skill para análise automatizada de **processos judiciais digitais** baixados em PDF (PROJUDI, PJe, e-TJ, etc.). Extrai a **linha do tempo** dos andamentos, **identifica irregularidades processuais** e gera um **relatório PDF estruturado e bem diagramado**.
 
 > ⚖️ Transforme PDFs de processos em análises forenses estruturadas em segundos.
