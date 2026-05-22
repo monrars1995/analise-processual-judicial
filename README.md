@@ -52,6 +52,13 @@ cd analise-processual-judicial
 pip install pdfplumber reportlab
 ```
 
+### Docker (opcional)
+
+```bash
+docker build -t analise-processual-judicial .
+docker run -v $(pwd):/data analise-processual-judicial python /app/scripts/extrair_dados.py /data/processo.pdf /data/processo.json
+```
+
 Ou use um ambiente virtual:
 
 ```bash
@@ -235,6 +242,27 @@ pip install pdfplumber reportlab
 ```
 
 ---
+
+## Instalação Automática
+
+Use o script `install.sh` para instalar a skill em todas as plataformas detectadas automaticamente:
+
+```bash
+chmod +x install.sh
+./install.sh
+```
+
+O script detecta e instala em:
+- **Claude Code** (`~/.claude/skills/`)
+- **Codex** (`~/.codex/skills/`)
+- **Antigravity (Gemini)** (`~/.gemini/config/skills/`)
+
+## CI/CD
+
+O repositório inclui GitHub Actions que testa os scripts em Python 3.10, 3.11, 3.12 e 3.13:
+- Lint com flake8
+- Teste de imports
+- Teste end-to-end com dados simulados
 
 ## Licença
 
