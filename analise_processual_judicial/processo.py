@@ -132,6 +132,14 @@ def main():
     p_batch.add_argument('output', nargs='?', help='Pasta de saída (padrão: atual)')
     p_batch.set_defaults(func=cmd_batch)
 
+    # exportar
+    p_exp = subparsers.add_parser('exportar', help='Exportar para XLSX e CSV')
+    p_exp.add_argument('dados', help='Arquivo JSON com dados extraídos')
+    p_exp.add_argument('irregularidades', help='Arquivo JSON com irregularidades')
+    p_exp.add_argument('xlsx', nargs='?', help='Arquivo XLSX de saída')
+    p_exp.add_argument('csv', nargs='?', help='Arquivo CSV de saída')
+    p_exp.set_defaults(func=lambda a: run_script('exportar', a.dados, a.irregularidades, a.xlsx or 'exportado.xlsx', a.csv or 'exportado.csv'))
+
     args = parser.parse_args()
     sys.exit(args.func(args))
 

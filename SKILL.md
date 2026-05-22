@@ -77,6 +77,18 @@ Run command: /processo batch /caminho/dos/processos /caminho/saida
 
 **Saída:** Para cada PDF, gera subpasta com JSON, irregularidades, estatísticas e PDF.
 
+### `/processo exportar <dados.json> <irregularidades.json> [saida.xlsx] [saida.csv]`
+
+Exporta os dados do processo para planilha Excel (XLSX) e CSV, com abas separadas para metadados, linha do tempo e irregularidades.
+
+```
+Run command: /processo exportar processo.json irregularidades.json
+```
+
+**Saída:** Arquivo XLSX com formatação profissional e CSV da linha do tempo.
+
+**Dependência:** `openpyxl`. Instalar com `pip install openpyxl` se necessário.
+
 ### CLI Unificada
 
 Para uso direto no terminal sem comandos `/`, use o script `processo.py`:

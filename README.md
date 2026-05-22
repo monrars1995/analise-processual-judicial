@@ -219,6 +219,20 @@ python scripts/identificar_irregularidades.py <dados.json> [saida_irregularidade
 python scripts/gerar_relatorio.py <dados.json> <irregularidades.json> [saida.pdf]
 ```
 
+### Exportar para Excel/CSV
+
+Exporte os dados para planilhas:
+
+```bash
+analise-processual exportar processo.json irregularidades.json processo.xlsx processo.csv
+```
+
+Gera:
+- **XLSX** com abas: Metadados, Linha do Tempo, Irregularidades (coloridas por gravidade)
+- **CSV** da linha do tempo com separador `;`
+
+**Dependência extra:** `pip install openpyxl`
+
 ### Modo Batch
 
 Processe múltiplos PDFs de uma só vez:
