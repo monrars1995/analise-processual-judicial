@@ -69,6 +69,21 @@ pip install -e .
 pip install pdfplumber reportlab
 ```
 
+### Interface Web (Streamlit)
+
+Para uso via navegador, sem linha de comando:
+
+```bash
+pip install streamlit
+streamlit run app.py
+```
+
+Acesse `http://localhost:8501` e faça upload do PDF do processo. A interface mostra:
+- Cards com número, classe, valor e quantidade de andamentos
+- Lista expansível de irregularidades com fundamento e recomendação
+- Estatísticas de duração e ritmo processual
+- Botões de download para JSON e PDF
+
 ### Docker (opcional)
 
 ```bash
