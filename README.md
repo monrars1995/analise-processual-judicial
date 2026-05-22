@@ -84,11 +84,22 @@ Acesse `http://localhost:8501` e faça upload do PDF do processo. A interface mo
 - Estatísticas de duração e ritmo processual
 - Botões de download para JSON e PDF
 
+### Makefile (atalhos rápidos)
+
+```bash
+make install      # Instala em modo desenvolvimento
+make test         # Executa pytest
+make lint         # Executa flake8
+make streamlit    # Inicia interface web
+make docker-build # Build Docker
+make clean        # Limpa arquivos temporários
+```
+
 ### Docker (opcional)
 
 ```bash
 docker build -t analise-processual-judicial .
-docker run -v $(pwd):/data analise-processual-judicial python /app/scripts/extrair_dados.py /data/processo.pdf /data/processo.json
+docker run -v $(pwd):/data analise-processual-judicial analise-processual analisar /data/processo.pdf
 ```
 
 Ou use um ambiente virtual:
