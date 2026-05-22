@@ -5,8 +5,15 @@ Recebe JSON de extrair_dados.py e produz JSON com irregularidades detectadas.
 """
 import json
 import sys
+import logging
 from datetime import datetime, timedelta
 from pathlib import Path
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 
 def parse_data(data_str):
@@ -48,6 +55,7 @@ def identificar_irregularidades(dados):
     classe = meta.get('classe', '')
 
     if not linha:
+        logger.warning("Linha do tempo vazia, nenhuma irregularidade pode ser detectada.")
         return irregularidades
 
     # 1. CITAÇÃO: Juizado Especial Cível - citação em até 30 dias da distribuição (Lei 9.099/95, art. 16)
@@ -261,7 +269,9 @@ def main():
     with open(entrada, 'r', encoding='utf-8') as f:
         dados = json.load(f)
 
+    logger.info(f"Analisando irregularidades para: {dados.get('metadados', {}).get('numero_processo', 'N/A')}")
     irregularidades = identificar_irregularidades(dados)
+    logger.info(f"Irregularidades identificadas: {len(irregularidades)}")
 
     resultado = {
         'numero_processo': dados.get('metadados', {}).get('numero_processo'),
@@ -271,7 +281,7 @@ def main():
 
     with open(saida, 'w', encoding='utf-8') as f:
         json.dump(resultado, f, ensure_ascii=False, indent=2)
-    print(f"Irregularidades identificadas: {len(irregularidades)}. Salvo em: {saida}")
+    logger.info(f"Irregularidades salvas em: {saida}")
 
 
 if __name__ == '__main__':

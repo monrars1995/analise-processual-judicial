@@ -6,6 +6,7 @@ Saída: JSON com metadados do processo, partes, índice de documentos e andament
 import json
 import re
 import sys
+import logging
 from pathlib import Path
 from datetime import datetime
 
@@ -14,6 +15,12 @@ try:
 except ImportError:
     print("Erro: pdfplumber não instalado. Execute: pip install pdfplumber")
     sys.exit(1)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 
 def parse_data_br(data_str):
@@ -74,6 +81,7 @@ def extrair_metadados(text):
             if len(nome_l) > 3:
                 partes.append({'polo': 'passivo', 'nome': nome_l})
     meta['partes'] = partes
+    logger.info(f"Metadados extraídos: {meta.get('numero_processo', 'N/A')}")
     return meta
 
 
@@ -153,10 +161,12 @@ def main():
     saida = Path(sys.argv[2]) if len(sys.argv) > 2 else pdf_path.with_suffix('.json')
 
     with pdfplumber.open(str(pdf_path)) as pdf:
+        logger.info(f"Abrindo PDF: {pdf_path} ({len(pdf.pages)} páginas)")
         texto_capa = pdf.pages[0].extract_text() or ""
         metadados = extrair_metadados(texto_capa)
         indice = extrair_indice(pdf.pages)
         andamentos = extrair_andamentos_adicionais(pdf.pages)
+        logger.info(f"Índice: {len(indice)} documentos, {len(andamentos)} andamentos adicionais")
 
     resultado = {
         'fonte': str(pdf_path),
@@ -173,7 +183,7 @@ def main():
 
     with open(saida, 'w', encoding='utf-8') as f:
         json.dump(resultado, f, ensure_ascii=False, indent=2)
-    print(f"Dados extraídos para: {saida}")
+    logger.info(f"Dados extraídos para: {saida}")
 
 
 if __name__ == '__main__':
